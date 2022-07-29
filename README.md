@@ -28,7 +28,56 @@
 
 # Mini Project - Student Management
 
-/login
-/admin
+authSaga
 
-/admin/\*
+LOOP
+- if logged in, watch LOGOUT
+- else watch LOGIN
+
+LOGIN 
+- call login API to get token + user info 
+- set token to local storage
+- redirect to admin page
+
+LOGOUT
+- clear token from local storage
+- redirect to login page
+
+authSlice
+
+┌── .prettierrc
+├── .gitignore
+├── package-lock.json
+├── package.json
+├── README.md
+├── public
+├── tsconfig.json
+└── api-collection
+    ├── cities.http
+	├── students.http
+
+└── src
+	├── api
+        ├── axiosClient.ts
+        ├── cityApi.ts
+        ├── studentApi.ts
+	├── app
+        ├── hooks.ts
+        ├── rootSaga.ts
+        ├── store.ts
+	├── components
+        ├── Commons.ts
+            ├── index.ts
+            ├── NotFound.tsx
+            ├── PrivateRoute.tsx
+        ├── Layout
+            ├── Admin.tsx
+            ├── index.ts
+	├── constants
+	├── features
+        ├── auth
+            ├── pages
+                ├── LoginPage.tsx
+        ├── counter
+        ├── dashboard
+	└── utils

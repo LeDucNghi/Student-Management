@@ -1,11 +1,11 @@
 import './App.css';
 
+import { NotFound, PrivateRoute } from 'components/Common';
 import React, { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import { AdminLayout } from 'components/Layout';
 import LoginPage from 'features/auth/pages/LoginPage';
-import { NotFound } from 'components/Common';
 import { cityApi } from 'api/cityApi';
 
 function App() {
@@ -14,15 +14,15 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
-      <Routes>
-        <Route path="/login" element={<LoginPage />} />
+    <Routes>
+      <Route path="login" element={<LoginPage />} />
 
-        <Route path="/admin" element={<AdminLayout />} />
+      <Route path="admin" element={<PrivateRoute />}>
+        <Route path="admin" element={<AdminLayout />} />
+      </Route>
 
-        <Route path="/*" element={<NotFound />} />
-      </Routes>
-    </div>
+      <Route path="*" element={<NotFound />} />
+    </Routes>
   );
 }
 
