@@ -25,3 +25,10 @@
             . patern là action
             . args là tham số truyền vào hàm đó
             . maxTries là tối đa số lần thử
+
+# Mini Project - Student Management
+
+/login
+/admin
+
+/admin/\*
