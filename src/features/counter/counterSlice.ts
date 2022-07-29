@@ -1,5 +1,6 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState, AppThunk } from '../../app/store';
+import { AppThunk, RootState } from '../../app/store';
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+
 import { fetchCount } from './counterAPI';
 
 export interface CounterState {
@@ -17,14 +18,11 @@ const initialState: CounterState = {
 // will call the thunk with the `dispatch` function as the first argument. Async
 // code can then be executed and other actions can be dispatched. Thunks are
 // typically used to make async requests.
-export const incrementAsync = createAsyncThunk(
-  'counter/fetchCount',
-  async (amount: number) => {
-    const response = await fetchCount(amount);
-    // The value we return becomes the `fulfilled` action payload
-    return response.data;
-  }
-);
+export const incrementAsync = createAsyncThunk('counter/fetchCount', async (amount: number) => {
+  const response = await fetchCount(amount);
+  // The value we return becomes the `fulfilled` action payload
+  return response.data;
+});
 
 export const counterSlice = createSlice({
   name: 'counter',
@@ -38,11 +36,21 @@ export const counterSlice = createSlice({
       // immutable state based off those changes
       state.value += 1;
     },
-    decrement: (state) => {
+    decrement: (state: RootState) => {
       state.value -= 1;
     },
     // Use the PayloadAction type to declare the contents of `action.payload`
     incrementByAmount: (state, action: PayloadAction<number>) => {
+      state.value += action.payload;
+    },
+
+    incrementSaga: (state, action: PayloadAction<number>) => {
+      state.status = 'loading';
+      // state.value += action.payload;
+    },
+
+    incrementSagaSuccess: (state, action: PayloadAction<number>) => {
+      state.status = 'idle';
       state.value += action.payload;
     },
   },
@@ -63,7 +71,8 @@ export const counterSlice = createSlice({
   },
 });
 
-export const { increment, decrement, incrementByAmount } = counterSlice.actions;
+export const { increment, decrement, incrementByAmount, incrementSaga, incrementSagaSuccess } =
+  counterSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
