@@ -10,6 +10,7 @@ export function PrivateRoute(props: RouteProps) {
   // otherwise, redirect to login page
 
   const isLoggedIn = Boolean(localStorage.getItem('access_token'));
+  console.log('🚀 ~ file: PrivateRoute.tsx ~ line 13 ~ PrivateRoute ~ isLoggedIn', isLoggedIn);
   if (!isLoggedIn) return <Navigate to="/login" replace={true} />;
 
   return <Route {...props} />;
