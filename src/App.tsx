@@ -1,37 +1,24 @@
 import './App.css';
 
 import { NotFound, PrivateRoute } from 'components/Common';
-import React, { useEffect } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 
 import { AdminLayout } from 'components/Layout';
-import { Button } from '@mui/material';
 import LoginPage from 'features/auth/pages/LoginPage';
-import { authActions } from 'features/auth/authSlice';
-import { cityApi } from 'api/cityApi';
-import { useAppDispatch } from 'app/hooks';
+import React from 'react';
 
 function App() {
-  useEffect(() => {
-    cityApi.getAll().then((res) => console.log(res));
-  }, []);
-
-  const dispatch = useAppDispatch();
-
   return (
     <>
-      <Button variant="contained" color="primary" onClick={() => dispatch(authActions.logout())}>
-        Logout
-      </Button>
-      <Routes>
-        <Route path="login" element={<LoginPage />} />
+      <Switch>
+        <Route path="/login" component={LoginPage} />
 
-        <Route path="admin" element={<PrivateRoute />}>
-          <Route path="admin" element={<AdminLayout />} />
-        </Route>
+        <PrivateRoute path="/admin">
+          <AdminLayout />
+        </PrivateRoute>
 
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+        <Route path="/" component={NotFound} />
+      </Switch>
     </>
   );
 }

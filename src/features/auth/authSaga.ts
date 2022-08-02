@@ -2,6 +2,7 @@ import { LoginPayload, authActions } from './authSlice';
 import { call, delay, fork, put, take } from 'redux-saga/effects';
 
 import { PayloadAction } from '@reduxjs/toolkit';
+import { push } from 'connected-react-router';
 
 function* handleLogin(payload: LoginPayload) {
   try {
@@ -16,6 +17,8 @@ function* handleLogin(payload: LoginPayload) {
         name: 'nghi',
       })
     );
+
+    yield put(push('/admin'));
   } catch (error) {
     console.log('🚀 ~ file: authSaga.ts ~ line 20 ~ function*handleLogin ~ error', error);
     // yield put(authActions.loginFailed(error.message));
@@ -24,8 +27,12 @@ function* handleLogin(payload: LoginPayload) {
 
 function* handleLogout() {
   yield delay(1000);
+
   console.log('handle logout');
+
   localStorage.removeItem('access_token');
+
+  yield put(push('/login'));
 }
 
 function* watchLoginFlow() {

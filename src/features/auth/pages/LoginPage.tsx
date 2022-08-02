@@ -1,12 +1,15 @@
 import * as React from 'react';
 
-import { Box, Button, Paper, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, Paper, Typography, createTheme } from '@mui/material';
 
 import { authActions } from '../authSlice';
 import { makeStyles } from '@mui/styles';
+import { useAppSelector } from 'app/hooks';
 import { useDispatch } from 'react-redux';
 
-const useStyles = makeStyles((theme) => ({
+const theme = createTheme();
+
+const useStyles = makeStyles({
   root: {
     display: 'flex',
     flexFlow: 'row nowrap',
@@ -16,12 +19,13 @@ const useStyles = makeStyles((theme) => ({
   },
 
   box: {
-    padding: 20,
+    padding: theme.spacing(2),
   },
-}));
+});
 export default function LoginPage() {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const isLogging = useAppSelector((state) => state.auth.logging);
 
   const handleLogin = () => {
     dispatch(
@@ -39,9 +43,15 @@ export default function LoginPage() {
         </Typography>
 
         <Box mt={4}>
-          <Button variant="contained" color="primary" fullWidth onClick={handleLogin}>
+          <Button
+            variant="contained"
+            color="primary"
+            fullWidth
+            onClick={handleLogin}
+            disabled={isLogging}
+          >
             {' '}
-            Fake Login
+            {isLogging ? <CircularProgress size={20} color="secondary" /> : 'Fake Login'}
           </Button>
         </Box>
       </Paper>
